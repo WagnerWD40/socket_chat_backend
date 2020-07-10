@@ -1,9 +1,9 @@
 import User from '../models/User';
+import { generateToken } from '../services/auth';
 
 class LoginController {
 
     async store(req, res) {
-        console.log(req.body);
         const { email, password } = req.body;
 
         try {
@@ -11,8 +11,12 @@ class LoginController {
 
             if (foundUser) {
                 if (await foundUser.validatePassword(password)) {
-                    return res.status(200).json({ message: 'Password OK' });
+                    const token = generateToken({ username: foundUser.username });
+
+                    return res.status(200).json({ token });
                 };
+
+                return res.status(403).json({ error: 'Invalid Password.' });
             };
 
             return res.status(400).json({ error: 'User does not exist.' });

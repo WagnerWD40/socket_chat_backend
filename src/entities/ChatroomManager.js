@@ -3,31 +3,55 @@ import Chatroom from './Chatroom';
 class ChatroomManager {
     constructor() {
         this.chatrooms = [];
-    }
+    };
 
-    getChatroomByName(chatroomName) {
+    getChatroomByName(chatroom) {
         return this.chatrooms.find(chatroom => chatroom.name === chatroom);
-    }
+    };
+
+    getChatroomUsers(chatroom) {
+        return this.getChatroomByName(chatroom).getMembers();
+    };
 
     removeUserFromServer(user) {
         this.chatrooms.forEach(chatroom => chatroom.removeUser(user));
-    }
+    };
 
-    createChatroom(chatroomName, ownerUser) {
-        const newChatroom = new Chatroom(chatroomName, ownerUser)
-        this.chatrooms.push(newChatroom);
+    createChatroom(chatroom, owner) {
+        if (!this.getChatroomByName(chatroom)) {
 
-        return newChatroom;
-    }
+            const newChatroom = new Chatroom(chatroom, owner);
+            newChatroom.addUser(owner);
 
-    addUser(chatroomName, user) {
-        const foundChatroom = this.getChatroomByName(chatroomName);
+            this.chatrooms.push(newChatroom);
+            console.log( this.chatrooms);
+        };
+    };
+
+    addUser(user, chatroom) {
+        const foundChatroom = this.getChatroomByName(chatroom);
         foundChatroom.addUser(user);
-    }
+    };
+
+    removeUser(user, chatroom) {
+        const foundChatroom = this.getChatroomByName(chatroom);
+
+        if (foundChatroom && foundChatroom.getMembers().includes(user)) {
+            foundChatroom.removeUser(user);
+        };
+
+        if (foundChatroom && foundChatroom.isEmpty()) {
+            this.deleteChatrrom(foundChatroom.name);
+        };
+    };
+
+    deleteChatroom(chatroom) {
+        this.chatrooms = this.chatrooms.filter(chatroom => chatroom.name !== chatroom);
+    };
 
     getAllChatrooms() {
         return this.chatrooms;
-    }
-}
+    };
+};
 
-export default ChatroomManager;
+export default new ChatroomManager();
