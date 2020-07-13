@@ -5,8 +5,8 @@ class ChatroomManager {
         this.chatrooms = [];
     };
 
-    getChatroomByName(chatroom) {
-        return this.chatrooms.find(chatroom => chatroom.name === chatroom);
+    getChatroomByName(chatroomName) {
+        return this.chatrooms.find(chatroom => chatroom.name === chatroomName);
     };
 
     getChatroomUsers(chatroom) {
@@ -24,13 +24,21 @@ class ChatroomManager {
             newChatroom.addUser(owner);
 
             this.chatrooms.push(newChatroom);
-            console.log( this.chatrooms);
+            console.log(this.chatrooms);
         };
     };
 
     addUser(user, chatroom) {
         const foundChatroom = this.getChatroomByName(chatroom);
         foundChatroom.addUser(user);
+    };
+
+    addMessage(message, chatroom) {
+        const foundChatroom = this.getChatroomByName(chatroom);
+
+        if (foundChatroom) {
+            foundChatroom.addMessage(message);
+        };
     };
 
     removeUser(user, chatroom) {
@@ -41,7 +49,7 @@ class ChatroomManager {
         };
 
         if (foundChatroom && foundChatroom.isEmpty()) {
-            this.deleteChatrrom(foundChatroom.name);
+            this.deleteChatroom(foundChatroom.name);
         };
     };
 

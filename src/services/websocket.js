@@ -30,7 +30,7 @@ function setupWebSocket(server) {
             const { chatroomName, message } = payload;
 
             const chatroomExists = ChatroomManager.getChatroomByName(chatroomName);
-            console.log(chatroomExists, message);
+            
             if (chatroomExists) {
                 sendMessage(chatroomName, message);
                 
