@@ -7,7 +7,10 @@ class LoginController {
         const { email, password } = req.body;
 
         try {
-            const foundUser = await User.findOne({ email });
+            const foundUser = await User.findOne({ email }).exec();
+
+            console.log({ email });
+            console.log(foundUser);
 
             if (foundUser) {
                 if (await foundUser.validatePassword(password)) {
@@ -23,9 +26,8 @@ class LoginController {
 
         } catch (err) {
             console.error(err);
+            return res.status(500).json({ error: 'Something went wrong' });
         };
-
-        return res.status(201).json({ message: 'ok' });
     };
 };
 
